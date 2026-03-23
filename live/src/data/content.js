@@ -162,9 +162,9 @@ const PROJECTS = {
 };
 
 const TEAM_MEMBERS = [
-  { name: "Keith Tang", role: "Product Strategist", portrait: "/founders/keith.png", tags: ["User Requirements", "Business Strategy", "UX"] },
-  { name: "Gabriel Ong", role: "Technical Lead", portrait: "/founders/astin.png", tags: ["Full-Stack Development", "AI Implementation", "DevOps"] },
-  { name: "Astin Tay", role: "Technical Lead", portrait: "/founders/gabriel.png", tags: ["Legal & Governance", "Solutions Architecture"] },
+  { name: "Keith Tang", role: "Product Strategist", portrait: "/founders/keith.jpeg", tags: ["User Requirements", "Business Strategy", "UX"], links: { linkedin: "https://www.linkedin.com/in/keibtang/" } },
+  { name: "Gabriel Ong", role: "Technical Lead", portrait: "/founders/gabriel.jpeg", tags: ["Full-Stack Development", "AI Implementation", "DevOps"], links: { linkedin: "https://www.linkedin.com/in/gabriel-zmong/", website: "https://gabrielongzm.com/" } },
+  { name: "Astin Tay", role: "Technical Lead", portrait: "/founders/astin.jpeg", tags: ["Legal & Governance", "Solutions Architecture"], links: { linkedin: "https://www.linkedin.com/in/astintay/" } },
 ];
 
 export function t() { return I18N[lang()] || I18N.en; }

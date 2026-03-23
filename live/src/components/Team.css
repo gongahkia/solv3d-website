@@ -7,5 +7,11 @@
 .team-role { margin-top: 0.35rem; font-weight: 700; color: var(--text-soft); font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.06em; }
 .team-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
 .team-tags span { display: inline-flex; align-items: center; min-height: 2rem; padding: 0 0.75rem; border-radius: 999px; border: 1px solid rgba(166,153,136,0.28); background: rgba(255,255,255,0.62); color: var(--text-soft); font-size: 0.82rem; }
+.team-links { display: grid; grid-template-rows: 0fr; overflow: hidden; transition: grid-template-rows 0.35s cubic-bezier(0.16,1,0.3,1), margin-top 0.35s cubic-bezier(0.16,1,0.3,1); margin-top: 0; }
+.team-links > * { overflow: hidden; }
+.team-card:hover .team-links, .team-card:focus-within .team-links { grid-template-rows: 1fr; margin-top: 1rem; }
+.team-links-inner { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.team-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.62); color: var(--text-soft); font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease; }
+.team-link:hover { border-color: var(--line-strong); color: var(--text); background: #fff; transform: translateY(-1px); }
 @media (max-width: 1120px) { .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 680px) { .team-grid { grid-template-columns: 1fr; } .team-card { padding: 1.15rem; } }
+@media (max-width: 680px) { .team-grid { grid-template-columns: 1fr; } .team-card { padding: 1.15rem; } .team-links { grid-template-rows: 1fr; margin-top: 1rem; } }
