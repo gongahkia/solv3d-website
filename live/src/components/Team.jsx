@@ -1,5 +1,5 @@
 import { onMount, For } from "solid-js";
-import { CONTENT } from "../data/content";
+import { t, TEAM_MEMBERS } from "../data/content";
 import "./Team.css";
 
 export default function Team() {
@@ -17,11 +17,11 @@ export default function Team() {
     <section class="section" id="team" ref={sectionRef}>
       <div class="shell section-shell">
         <div class="section-heading reveal">
-          <h2>{CONTENT.team.title}</h2>
-          <p>{CONTENT.team.intro}</p>
+          <h2>{t().team.title}</h2>
+          <p>{t().team.intro}</p>
         </div>
         <div class="team-grid">
-          <For each={CONTENT.team.members}>
+          <For each={TEAM_MEMBERS}>
             {(member, i) => (
               <div class="team-card reveal" style={{ "--reveal-delay": `${i() * 0.12}s` }}>
                 <div class="team-portrait">

@@ -25,7 +25,6 @@ export default function Hero() {
     timer = setTimeout(runCycle, 600);
   });
   onCleanup(() => clearTimeout(timer));
-
   return (
     <section class="hero section" ref={sectionRef}>
       <div class="shell hero-grid reveal" ref={sectionRef}>
@@ -63,9 +62,7 @@ export default function Hero() {
                 <For each={t().hero.columns[0].items}>
                   {(item, i) => (
                     <div class="board-card" classList={{ "is-fading-out": phase() >= 1 }} style={{ "--move-delay": `${i() * 0.15}s` }}>
-                      <div class="board-card-inner">
-                        <span class="board-card-text">{item}</span>
-                      </div>
+                      <div class="board-card-inner"><span class="board-card-text">{item}</span></div>
                     </div>
                   )}
                 </For>
@@ -101,9 +98,7 @@ export default function Hero() {
                   {(item, i) => (
                     <div class="board-card" classList={{ "is-arriving": phase() >= 2, "is-complete": phase() >= 3 }} style={{ "--move-delay": `${i() * 0.18}s` }}>
                       <div class="board-card-inner board-card-outcome">
-                        <span class="board-card-check">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        </span>
+                        <span class="board-card-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
                         <span class="board-card-text">{item}</span>
                       </div>
                     </div>

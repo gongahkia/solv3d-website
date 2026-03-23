@@ -1,5 +1,5 @@
 import { createSignal, onMount, onCleanup, For, Show } from "solid-js";
-import { CONTENT } from "../data/content";
+import { t, PROJECTS } from "../data/content";
 import "./Projects.css";
 
 function VideoShowcase(props) {
@@ -7,24 +7,12 @@ function VideoShowcase(props) {
   return (
     <div class="video-showcase">
       <div class="video-main">
-        <video
-          src={props.videos[active()].src}
-          autoplay
-          loop
-          muted
-          playsinline
-          key={active()}
-        />
+        <video src={props.videos[active()].src} autoplay loop muted playsinline key={active()} />
       </div>
       <div class="video-tabs">
         <For each={props.videos}>
           {(v, i) => (
-            <button
-              classList={{ "video-tab": true, "is-active": i() === active() }}
-              onClick={() => setActive(i())}
-            >
-              {v.label}
-            </button>
+            <button classList={{ "video-tab": true, "is-active": i() === active() }} onClick={() => setActive(i())}>{v.label}</button>
           )}
         </For>
       </div>
@@ -42,10 +30,7 @@ function ImageGallery(props) {
       <div class="gallery-thumbs">
         <For each={props.images}>
           {(img, i) => (
-            <button
-              classList={{ "gallery-thumb": true, "is-active": i() === active() }}
-              onClick={() => setActive(i())}
-            >
+            <button classList={{ "gallery-thumb": true, "is-active": i() === active() }} onClick={() => setActive(i())}>
               <img src={img.src} alt={img.alt} loading="lazy" />
             </button>
           )}
@@ -77,18 +62,17 @@ export default function Projects() {
       window.removeEventListener("resize", updateScroll);
     });
   });
-  const fluent = CONTENT.projects.items[0];
-  const dealbreaker = CONTENT.projects.items[1];
+  const fluent = PROJECTS.items[0];
+  const dealbreaker = PROJECTS.items[1];
   return (
     <section class="projects-wrapper" id="projects" ref={wrapperRef}>
       <div class="projects-sticky">
         <div class="projects-header shell">
           <div class="section-heading">
-            <h2>{CONTENT.projects.title}</h2>
+            <h2>{t().projects.title}</h2>
           </div>
         </div>
         <div class="projects-track" ref={trackRef}>
-          {/* fluent */}
           <div class="project-slide">
             <div class="project-card">
               <div class="project-media">
@@ -111,7 +95,6 @@ export default function Projects() {
               </div>
             </div>
           </div>
-          {/* dealbreaker */}
           <div class="project-slide">
             <div class="project-card">
               <div class="project-media">

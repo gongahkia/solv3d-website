@@ -1,5 +1,5 @@
 import { createSignal, onMount, For } from "solid-js";
-import { CONTENT } from "../data/content";
+import { t } from "../data/content";
 import "./Faq.css";
 
 function FaqItem(props) {
@@ -34,12 +34,12 @@ export default function Faq() {
     <section class="section" id="faq" ref={sectionRef}>
       <div class="shell section-shell">
         <div class="section-heading reveal">
-          <p class="faq-eyebrow">{CONTENT.faq.eyebrow}</p>
-          <h2>{CONTENT.faq.title}</h2>
-          <p>{CONTENT.faq.intro}</p>
+          <p class="faq-eyebrow">{t().faq.eyebrow}</p>
+          <h2>{t().faq.title}</h2>
+          <p>{t().faq.intro}</p>
         </div>
         <div class="faq-grid reveal">
-          <For each={CONTENT.faq.items}>
+          <For each={t().faq.items}>
             {(item) => <FaqItem question={item.question} answer={item.answer} />}
           </For>
         </div>

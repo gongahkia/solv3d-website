@@ -1,5 +1,5 @@
 import { lang } from "./lang";
-export const CONTACT_EMAIL = "astintwl@gmail.com";
+export const CONTACT_EMAIL = "askus.solv3d@gmail.com";
 
 const I18N = {
   en: {
@@ -132,9 +132,7 @@ const I18N = {
   },
 };
 
-// project data is language-independent (names/descriptions stay in English)
 const PROJECTS = {
-  title: () => t().projects.title,
   items: [
     {
       name: "Fluent",
