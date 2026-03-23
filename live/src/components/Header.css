@@ -5,10 +5,9 @@
   border-bottom: 1px solid rgba(166,153,136,0.16);
 }
 .header-row { min-height: 4.9rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.brand { display: inline-flex; align-items: center; gap: 0.85rem; text-decoration: none; }
-.brand-mark { width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.95rem; background: #121212; color: #fff; font-size: 0.92rem; font-weight: 800; letter-spacing: 0.06em; }
-.brand-text { display: grid; gap: 0.08rem; font-size: 0.8rem; color: var(--text-soft); }
-.brand-text strong { color: var(--text); font-size: 1rem; }
+.brand { display: inline-flex; align-items: center; text-decoration: none; }
+.brand-text { display: grid; gap: 0.1rem; font-size: 0.8rem; color: var(--text-soft); }
+.brand-logo { height: 2.2rem; width: auto; display: block; }
 .site-nav { display: inline-flex; align-items: center; gap: 1.8rem; color: var(--text-soft); font-size: 0.95rem; }
 .site-nav a { transition: color 180ms ease; }
 .site-nav a:hover { color: var(--text); }

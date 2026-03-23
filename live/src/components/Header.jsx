@@ -10,9 +10,8 @@ export default function Header() {
     <header class="site-header">
       <div class="shell header-row">
         <a class="brand" href="#top" aria-label="Solv3d home">
-          <span class="brand-mark">{t().brand.mark}</span>
           <span class="brand-text">
-            <strong>{t().brand.name}</strong>
+            <img class="brand-logo" src="/logo.png" alt="Solv3d" />
             <span>{t().brand.tagline}</span>
           </span>
         </a>
