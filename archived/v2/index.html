@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3 guys | Practical Digital Support for SMEs</title>
+    <meta
+      name="description"
+      content="3 guys helps SME teams fix messy workflows, reduce manual admin, and introduce AI carefully using the tools they already have."
+    />
+    <meta property="og:title" content="3 guys | Practical Digital Support for SMEs" />
+    <meta
+      property="og:description"
+      content="Clearer workflows, lighter operations, and careful AI adoption for growing SMEs."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-row">
+        <a class="brand" href="#top" aria-label="3 guys home">
+          <span class="brand-text">
+            <strong>3 guys</strong>
+            <span data-copy-path="brand.tagline"></span>
+          </span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#services" data-copy-path="nav.services"></a>
+          <a href="#next-steps" data-copy-path="nav.nextSteps"></a>
+          <a href="#workflow" data-copy-path="nav.workflow"></a>
+          <a href="#team" data-copy-path="nav.team"></a>
+          <a href="#contact" data-copy-path="nav.contact"></a>
+        </nav>
+
+        <div class="header-tools">
+          <label class="language-picker header-language" for="language-select-desktop">
+            <span data-copy-path="footer.languageLabel"></span>
+            <select id="language-select-desktop" data-language-select aria-label="Language select"></select>
+          </label>
+
+          <a class="button button-primary button-small header-cta" href="#contact" data-copy-path="cta.primary"></a>
+
+          <button
+            type="button"
+            class="menu-toggle"
+            data-menu-toggle
+            aria-expanded="false"
+            aria-controls="mobile-menu-shell"
+          >
+            <span class="sr-only" data-copy-path="nav.menuLabel"></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu-shell" id="mobile-menu-shell" data-mobile-menu-shell hidden>
+      <button type="button" class="mobile-menu-backdrop" data-menu-close aria-label="Close menu"></button>
+
+      <div class="mobile-menu-panel">
+        <div class="mobile-menu-top">
+          <span class="mobile-menu-title" data-copy-path="nav.menuTitle"></span>
+          <button type="button" class="mobile-menu-close" data-menu-close aria-label="Close menu">
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <nav class="mobile-menu-nav" aria-label="Mobile">
+          <a href="#services" data-menu-close data-copy-path="nav.services"></a>
+          <a href="#next-steps" data-menu-close data-copy-path="nav.nextSteps"></a>
+          <a href="#workflow" data-menu-close data-copy-path="nav.workflow"></a>
+          <a href="#team" data-menu-close data-copy-path="nav.team"></a>
+          <a href="#faq" data-menu-close data-copy-path="nav.faq"></a>
+          <a href="#contact" data-menu-close data-copy-path="nav.contact"></a>
+        </nav>
+
+        <label class="language-picker mobile-language" for="language-select-mobile">
+          <span data-copy-path="footer.languageLabel"></span>
+          <select id="language-select-mobile" data-language-select aria-label="Language select"></select>
+        </label>
+
+        <a class="button button-primary mobile-menu-cta" href="#contact" data-menu-close data-copy-path="cta.primary"></a>
+      </div>
+    </div>
+
+    <main id="top">
+      <section class="hero section">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <h1 data-copy-path="hero.title"></h1>
+            <p class="hero-body" data-copy-path="hero.body"></p>
+          </div>
+
+          <div class="hero-stack" aria-hidden="true" data-hero-stack></div>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="services.eyebrow"></p>
+            <h2 data-copy-path="services.title"></h2>
+            <p data-copy-path="services.intro"></p>
+          </div>
+
+          <div class="card-grid services-grid" data-services-grid></div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="next-steps">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="nextSteps.eyebrow"></p>
+            <h2 data-copy-path="nextSteps.title"></h2>
+            <p data-copy-path="nextSteps.intro"></p>
+          </div>
+
+          <div class="step-grid" data-next-steps-grid></div>
+        </div>
+      </section>
+
+      <section class="section" id="proof">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="proof.eyebrow"></p>
+            <h2 data-copy-path="proof.title"></h2>
+            <p data-copy-path="proof.intro"></p>
+          </div>
+
+          <div class="proof-scroll-shell" data-proof-scroll-shell>
+            <div class="proof-scroll-sticky" data-proof-scroll-sticky>
+              <div class="proof-scroll-viewport" data-proof-scroll-viewport>
+                <div class="proof-grid" data-proof-grid></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-band">
+            <div>
+              <p class="cta-band-kicker" data-copy-path="proof.ctaEyebrow"></p>
+              <h3 data-copy-path="proof.ctaTitle"></h3>
+            </div>
+            <a class="button button-primary" href="#contact" data-copy-path="proof.ctaButton"></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="workflow">
+        <div class="shell section-shell workflow-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="workflow.eyebrow"></p>
+            <h2 data-copy-path="workflow.title"></h2>
+            <p data-copy-path="workflow.intro"></p>
+          </div>
+
+          <div class="workflow-layout">
+            <ol class="workflow-list" data-workflow-list></ol>
+
+            <aside class="workflow-note">
+              <p class="workflow-note-kicker" data-copy-path="workflow.noteEyebrow"></p>
+              <h3 data-copy-path="workflow.noteTitle"></h3>
+              <p data-copy-path="workflow.noteBody"></p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="team">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="team.eyebrow"></p>
+            <h2 data-copy-path="team.title"></h2>
+            <p data-copy-path="team.intro"></p>
+          </div>
+
+          <div class="team-grid" data-team-grid></div>
+        </div>
+      </section>
+
+      <section class="section section-soft" id="faq">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <p class="section-kicker" data-copy-path="faq.eyebrow"></p>
+            <h2 data-copy-path="faq.title"></h2>
+            <p data-copy-path="faq.intro"></p>
+          </div>
+
+          <div class="faq-grid" data-faq-grid></div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="shell section-shell contact-shell">
+          <div class="section-heading contact-heading">
+            <p class="section-kicker" data-copy-path="contactForm.eyebrow"></p>
+            <h2 data-copy-path="contactForm.title"></h2>
+            <p data-copy-path="contactForm.intro"></p>
+          </div>
+
+          <div class="contact-layout">
+            <form class="contact-form" data-contact-form novalidate>
+              <div class="contact-form-shell">
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="contact-name">
+                      <span data-copy-path="contactForm.fields.name.label"></span>
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      autocomplete="name"
+                      data-placeholder-path="contactForm.fields.name.placeholder"
+                    />
+                    <p class="field-error" data-field-error="name"></p>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="contact-email">
+                      <span data-copy-path="contactForm.fields.email.label"></span>
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      data-placeholder-path="contactForm.fields.email.placeholder"
+                    />
+                    <p class="field-error" data-field-error="email"></p>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="contact-company">
+                      <span data-copy-path="contactForm.fields.company.label"></span>
+                    </label>
+                    <input
+                      id="contact-company"
+                      name="company"
+                      type="text"
+                      autocomplete="organization"
+                      data-placeholder-path="contactForm.fields.company.placeholder"
+                    />
+                    <p class="field-error" data-field-error="company"></p>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="contact-timeline">
+                      <span data-copy-path="contactForm.fields.timeline.label"></span>
+                    </label>
+                    <select id="contact-timeline" name="timeline" data-contact-timeline></select>
+                    <p class="field-error" data-field-error="timeline"></p>
+                  </div>
+
+                  <div class="form-field form-field-full">
+                    <label for="contact-challenge">
+                      <span data-copy-path="contactForm.fields.challenge.label"></span>
+                    </label>
+                    <textarea
+                      id="contact-challenge"
+                      name="challenge"
+                      rows="6"
+                      data-placeholder-path="contactForm.fields.challenge.placeholder"
+                    ></textarea>
+                    <p class="field-error" data-field-error="challenge"></p>
+                  </div>
+                </div>
+
+                <section class="contact-preview" aria-live="polite">
+                  <div class="contact-preview-head">
+                    <p class="contact-preview-kicker" data-copy-path="contactForm.previewEyebrow"></p>
+                    <h3 data-copy-path="contactForm.previewTitle"></h3>
+                  </div>
+
+                  <div class="contact-preview-row">
+                    <span data-copy-path="contactForm.previewSubjectLabel"></span>
+                    <strong data-contact-preview-subject></strong>
+                  </div>
+
+                  <div class="contact-preview-tags">
+                    <span data-contact-preview-company></span>
+                    <span data-contact-preview-email></span>
+                    <span data-contact-preview-timeline></span>
+                  </div>
+
+                  <div class="contact-preview-row contact-preview-row-body">
+                    <span data-copy-path="contactForm.previewNoteLabel"></span>
+                    <p data-contact-preview-body></p>
+                  </div>
+                </section>
+
+                <div class="contact-actions">
+                  <button
+                    type="submit"
+                    class="button button-primary"
+                    data-contact-submit
+                    data-copy-path="contactForm.submit"
+                  ></button>
+                </div>
+              </div>
+
+              <div class="contact-mail-stage" aria-hidden="true">
+                <div class="contact-mail-orbit"></div>
+                <div class="contact-mail-envelope">
+                  <div class="contact-mail-sheet">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div class="contact-mail-pocket"></div>
+                  <div class="contact-mail-flap"></div>
+                </div>
+                <div class="contact-mail-copy">
+                  <strong data-copy-path="contactForm.sendingTitle"></strong>
+                  <p data-copy-path="contactForm.sendingBody"></p>
+                </div>
+              </div>
+            </form>
+
+            <aside class="contact-illustration" aria-hidden="true">
+              <div class="contact-illustration-stage" data-contact-illustration-stage>
+                <div class="contact-speech contact-speech-left">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+
+                <div class="contact-speech contact-speech-right">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+
+                <div class="contact-character contact-character-left">
+                  <div class="contact-character-body">
+                    <span class="contact-character-eye"></span>
+                    <span class="contact-character-eye"></span>
+                    <span class="contact-character-mouth"></span>
+                    <span class="contact-character-cheek contact-character-cheek-left"></span>
+                    <span class="contact-character-cheek contact-character-cheek-right"></span>
+                  </div>
+                </div>
+
+                <div class="contact-center-spark">
+                  <span class="contact-center-spark-main"></span>
+                  <span class="contact-center-spark-dot"></span>
+                  <span class="contact-center-spark-dot contact-center-spark-dot-alt"></span>
+                </div>
+
+                <div class="contact-character contact-character-right">
+                  <div class="contact-character-body">
+                    <span class="contact-character-eye"></span>
+                    <span class="contact-character-eye"></span>
+                    <span class="contact-character-mouth"></span>
+                    <span class="contact-character-cheek contact-character-cheek-left"></span>
+                    <span class="contact-character-cheek contact-character-cheek-right"></span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div class="footer-brand-block">
+          <a class="brand" href="#top" aria-label="3 guys home">
+            <span class="brand-text">
+              <strong>3 guys</strong>
+              <span data-copy-path="brand.tagline"></span>
+            </span>
+          </a>
+
+          <div class="footer-contacts">
+            <span class="footer-label" data-copy-path="footer.contactLabel"></span>
+            <a href="mailto:astintwl@gmail.com">astintwl@gmail.com</a>
+            <span data-copy-path="footer.location"></span>
+          </div>
+        </div>
+
+        <p class="footer-copyright" data-footer-copyright></p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

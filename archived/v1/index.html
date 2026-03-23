@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3volve | Practical Digital Transformation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-row">
+        <a class="brand" href="#top" aria-label="3volve home">
+          <span class="brand-mark">3V</span>
+          <span class="brand-text">
+            <strong>3volve</strong>
+            <span data-copy-path="brand.tagline"></span>
+          </span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#solutions" data-copy-path="nav.solutions"></a>
+          <a href="#about" data-copy-path="nav.about"></a>
+          <a href="#team" data-copy-path="nav.team"></a>
+        </nav>
+
+        <button type="button" class="button button-primary button-small" data-contact-open data-copy-path="cta.contact"></button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero section">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <p class="hero-kicker" data-copy-path="hero.eyebrow"></p>
+            <h1 data-copy-path="hero.title"></h1>
+            <p class="hero-body" data-copy-path="hero.body"></p>
+
+            <div class="hero-actions">
+              <button type="button" class="button button-primary" data-contact-open data-copy-path="cta.contact"></button>
+              <a class="button button-secondary" href="#solutions" data-copy-path="cta.secondary"></a>
+            </div>
+
+            <div class="hero-signals" data-hero-signals></div>
+          </div>
+
+          <div class="hero-window" aria-hidden="true">
+            <div class="hero-window-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="hero-window-title" data-copy-path="hero.windowTitle"></span>
+            </div>
+            <div class="hero-window-body" data-hero-motion></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="solutions">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <h2 data-copy-path="nav.solutions"></h2>
+            <p data-copy-path="solutions.intro"></p>
+          </div>
+
+          <div class="solutions-layout">
+            <div class="solutions-grid" data-solution-cards></div>
+
+            <div class="workflow-panel">
+              <p class="panel-kicker" data-copy-path="solutions.workflowKicker"></p>
+              <h3 data-copy-path="solutions.workflowTitle"></h3>
+              <p class="workflow-body" data-copy-path="solutions.workflowBody"></p>
+              <ol class="workflow-steps" data-workflow-steps></ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="shell section-shell about-shell">
+          <div class="section-heading about-copy">
+            <h2 data-copy-path="nav.about"></h2>
+            <p class="about-intro" data-copy-path="about.intro"></p>
+            <p data-copy-path="about.bodyOne"></p>
+            <p data-copy-path="about.bodyTwo"></p>
+            <ul class="about-points" data-about-points></ul>
+          </div>
+
+          <div class="about-motion-grid" data-about-motion aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="section" id="team">
+        <div class="shell section-shell">
+          <div class="section-heading">
+            <h2 data-copy-path="nav.team"></h2>
+            <p data-copy-path="team.intro"></p>
+          </div>
+
+          <div class="team-grid" data-team-grid></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-shell">
+        <div class="footer-brand-block">
+          <a class="brand" href="#top" aria-label="3volve home">
+            <span class="brand-mark">3V</span>
+            <span class="brand-text">
+              <strong>3volve</strong>
+              <span data-copy-path="brand.tagline"></span>
+            </span>
+          </a>
+
+          <div class="footer-contacts">
+            <span class="footer-label" data-copy-path="footer.contactLabel"></span>
+            <a href="mailto:astintwl@gmail.com">astintwl@gmail.com</a>
+            <span data-copy-path="footer.location"></span>
+          </div>
+        </div>
+
+        <div class="footer-meta">
+          <label class="language-picker" for="language-select">
+            <span data-copy-path="footer.languageLabel"></span>
+            <select id="language-select" data-language-select aria-label="Language select"></select>
+          </label>
+
+          <p class="footer-copyright" data-footer-copyright></p>
+        </div>
+      </div>
+    </footer>
+
+    <div class="contact-overlay" data-contact-overlay hidden>
+      <div class="contact-backdrop" data-contact-close></div>
+
+      <div class="contact-window" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+        <div class="contact-window-top">
+          <div class="window-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="contact-window-label" data-copy-path="contact.windowLabel"></span>
+          <button type="button" class="contact-close" data-contact-close aria-label="Close overlay">
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="contact-grid">
+          <section class="contact-main">
+            <div class="contact-progress">
+              <span data-copy-path="contact.progressLabel"></span>
+              <strong data-contact-progress-text></strong>
+            </div>
+
+            <div class="contact-progress-pills" data-contact-progress-pills></div>
+
+            <h2 id="contact-title" data-contact-question></h2>
+            <p class="contact-description" data-contact-description></p>
+
+            <div class="contact-options" data-contact-options></div>
+
+            <div class="contact-other-shell" data-contact-other-shell hidden>
+              <label class="contact-other-label" for="contact-other-input" data-copy-path="contact.otherPrompt"></label>
+              <input id="contact-other-input" type="text" class="contact-other-input" data-contact-other-input />
+            </div>
+
+            <div class="contact-controls">
+              <button type="button" class="button button-secondary button-small" data-contact-back></button>
+              <button type="button" class="button button-primary button-small" data-contact-next></button>
+            </div>
+          </section>
+
+          <aside class="contact-draft">
+            <p class="panel-kicker" data-copy-path="contact.draftLabel"></p>
+            <h3 data-contact-plan-title></h3>
+            <p class="contact-plan-summary" data-contact-plan-summary></p>
+            <ul class="contact-plan-points" data-contact-plan-points></ul>
+            <button type="button" class="button button-primary" data-contact-submit></button>
+            <p class="contact-plan-note" data-copy-path="contact.draftNote"></p>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
