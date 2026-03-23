@@ -1,7 +1,8 @@
-.projects-wrapper { height: 250vh; position: relative; }
+.projects-wrapper { height: 300vh; position: relative; }
 .projects-sticky { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .projects-header { padding: 3rem 0 1.4rem; flex: none; }
-.projects-track { display: flex; gap: 2rem; flex: 1; align-items: stretch; padding: 0 max(1rem, calc((100vw - var(--max-width)) / 2)) 2rem; will-change: transform; }
+.projects-track { display: flex; gap: 2rem; flex: 1; align-items: stretch; padding: 0 0 2rem max(1rem, calc((100vw - var(--max-width)) / 2)); will-change: transform; }
+.projects-track::after { content: ""; flex: none; width: max(1rem, calc((100vw - var(--max-width)) / 2)); }
 .project-slide { flex: none; width: min(85vw, 960px); }
 .project-card { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 2rem; padding: 1.8rem; border-radius: var(--radius-xl); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); align-items: center; height: 100%; }
 .project-media { border-radius: var(--radius-lg); overflow: hidden; }
