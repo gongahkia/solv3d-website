@@ -164,7 +164,7 @@ const PROJECTS = {
 const TEAM_MEMBERS = [
   { name: "Keith Tang", role: "Product Strategist", portrait: "/founders/keith.png", tags: ["User Requirements", "Business Strategy", "UX"] },
   { name: "Gabriel Ong", role: "Technical Lead", portrait: "/founders/astin.png", tags: ["Full-Stack Development", "AI Implementation", "DevOps"] },
-  { name: "Astin Tay", role: "Technical Lead", portrait: "/founders/gabriel.png", tags: ["Solutions Architecture", "Security & Governance"] },
+  { name: "Astin Tay", role: "Technical Lead", portrait: "/founders/gabriel.png", tags: ["Legal & Governance", "Solutions Architecture"] },
 ];
 
 export function t() { return I18N[lang()] || I18N.en; }
