@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/solver-jr/status", "destination": "/api/solver-jr/status" },
+    { "source": "/api/solver-jr", "destination": "/api/solver-jr" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
