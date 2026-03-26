@@ -134,25 +134,25 @@ export default function Diagnostic() {
               <Show when={loading()}>
                 <div class="diagnostic-message">
                   <span class="diagnostic-role">Solver Jr.</span>
-                  <p>{t().diagnostic.sending}</p>
+                  <p class="diagnostic-thinking">...</p>
+                </div>
+              </Show>
+
+              <Show when={!hasUserMessages()}>
+                <div class="diagnostic-starters">
+                  <span>{t().diagnostic.starterTitle}</span>
+                  <div class="diagnostic-chip-row">
+                    <For each={t().diagnostic.starters}>
+                      {(starter) => (
+                        <button type="button" class="diagnostic-chip" onClick={() => submitMessage(starter)} disabled={loading()}>
+                          {starter}
+                        </button>
+                      )}
+                    </For>
+                  </div>
                 </div>
               </Show>
             </div>
-
-            <Show when={!hasUserMessages()}>
-              <div class="diagnostic-starters">
-                <span>{t().diagnostic.starterTitle}</span>
-                <div class="diagnostic-chip-row">
-                  <For each={t().diagnostic.starters}>
-                    {(starter) => (
-                      <button type="button" class="diagnostic-chip" onClick={() => submitMessage(starter)} disabled={loading()}>
-                        {starter}
-                      </button>
-                    )}
-                  </For>
-                </div>
-              </div>
-            </Show>
 
             <form
               class="diagnostic-form"
@@ -197,11 +197,6 @@ export default function Diagnostic() {
                     <span />
                   </div>
                   <p class="diagnostic-empty">{t().diagnostic.insightEmpty}</p>
-                  <div class="diagnostic-empty-list">
-                    <span>{t().diagnostic.firstMoveLabel}</span>
-                    <span>{t().diagnostic.opportunitiesLabel}</span>
-                    <span>{t().diagnostic.prerequisitesLabel}</span>
-                  </div>
                 </div>
               }
             >
@@ -216,41 +211,21 @@ export default function Diagnostic() {
               </div>
 
               <Show when={insight().ai_opportunities.length}>
-                <div class="diagnostic-stack">
+                <div class="diagnostic-opps">
                   <span class="diagnostic-stack-label">{t().diagnostic.opportunitiesLabel}</span>
                   <For each={insight().ai_opportunities}>
                     {(item) => (
-                      <article class="diagnostic-opportunity">
-                        <div class="diagnostic-opportunity-top">
-                          <h3>{item.title}</h3>
-                          <span>{formatReadiness(item.readiness)}</span>
-                        </div>
-                        <p>{item.fit_reason}</p>
-                        <strong>{item.first_step}</strong>
-                      </article>
+                      <div class="diagnostic-opp-row">
+                        <span class="diagnostic-opp-title">{item.title}</span>
+                        <span class="diagnostic-opp-badge" classList={{
+                          "is-ready": item.readiness === "ready_now",
+                          "is-foundation": item.readiness === "needs_foundation",
+                        }}>{formatReadiness(item.readiness)}</span>
+                      </div>
                     )}
                   </For>
                 </div>
               </Show>
-
-              <Show when={insight().prerequisites.length}>
-                <div class="diagnostic-panel">
-                  <span>{t().diagnostic.prerequisitesLabel}</span>
-                  <ul>
-                    <For each={insight().prerequisites}>{(item) => <li>{item}</li>}</For>
-                  </ul>
-                </div>
-              </Show>
-
-              <div class="diagnostic-panel">
-                <span>{t().diagnostic.whyPartnerLabel}</span>
-                <p>{insight().why_partnering_matters}</p>
-              </div>
-
-              <div class="diagnostic-panel">
-                <span>{t().diagnostic.nextQuestionLabel}</span>
-                <p>{insight().next_question}</p>
-              </div>
             </Show>
           </aside>
         </div>

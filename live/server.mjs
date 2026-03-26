@@ -90,8 +90,11 @@ if (process.env.NODE_ENV !== "development" && existsSync(path.join(distDir, "ind
   });
 }
 
-app.listen(port, () => {
-  console.log(`Solver Jr. API listening on http://127.0.0.1:${port}`);
+const server = app.listen(port, "127.0.0.1");
+server.on("listening", () => console.log(`Solver Jr. API listening on http://127.0.0.1:${port}`));
+server.on("error", (err) => {
+  console.error(`Failed to start server: ${err.message}`);
+  process.exit(1);
 });
 
 function resolveLanguage(language) {
