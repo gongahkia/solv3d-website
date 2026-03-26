@@ -11,6 +11,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.92fr);
   gap: 1.4rem;
+  align-items: start;
 }
 .diagnostic-chat,
 .diagnostic-insight {
@@ -21,12 +22,16 @@
   backdrop-filter: blur(16px);
 }
 .diagnostic-chat { padding: 1.25rem; }
-.diagnostic-insight { padding: 1.2rem; }
+.diagnostic-insight {
+  position: sticky;
+  top: 6rem;
+  padding: 1.2rem;
+}
 .diagnostic-chat-top,
 .diagnostic-insight-top,
 .diagnostic-opportunity-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
@@ -54,6 +59,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   padding: 0.78rem 1rem;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
@@ -65,6 +71,21 @@
   background: var(--surface-dark);
   border-color: transparent;
   color: #fff;
+}
+.diagnostic-email.is-disabled {
+  background: rgba(27,26,23,0.08);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+.diagnostic-insight-top {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.diagnostic-insight-top p {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
 }
 .diagnostic-starters span,
 .diagnostic-stack-label,
@@ -138,7 +159,6 @@
 }
 .diagnostic-form button:disabled,
 .diagnostic-chip:disabled { opacity: 0.5; cursor: not-allowed; }
-.diagnostic-error { margin-top: 0.8rem; color: #8f3b2d; }
 .diagnostic-summary,
 .diagnostic-panel,
 .diagnostic-opportunity {
@@ -148,6 +168,72 @@
 }
 .diagnostic-summary { padding: 1rem; }
 .diagnostic-summary p { margin-top: 0.75rem; }
+.diagnostic-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1.2rem;
+  border-radius: 1.2rem;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at top right, rgba(201,176,137,0.12), transparent 10rem),
+    rgba(255,255,255,0.7);
+}
+.diagnostic-empty {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+.diagnostic-empty-orbit {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background: rgba(201,176,137,0.14);
+}
+.diagnostic-empty-orbit span {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(123,89,37,0.14);
+}
+.diagnostic-empty-orbit span:nth-child(1) {
+  top: 0.65rem;
+  left: 0.65rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: rgba(123,89,37,0.18);
+}
+.diagnostic-empty-orbit span:nth-child(2) {
+  top: 0.45rem;
+  right: 0.45rem;
+  width: 0.65rem;
+  height: 0.65rem;
+}
+.diagnostic-empty-orbit span:nth-child(3) {
+  bottom: 0.55rem;
+  right: 0.7rem;
+  width: 0.42rem;
+  height: 0.42rem;
+}
+.diagnostic-empty-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.diagnostic-empty-list span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--line);
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
 .diagnostic-panel {
   margin-top: 0.9rem;
   padding: 0.95rem 1rem;
@@ -178,9 +264,47 @@
 }
 .diagnostic-opportunity p { margin: 0.6rem 0; }
 .diagnostic-opportunity strong { font-size: 0.95rem; }
+.diagnostic-error-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  z-index: 65;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(36rem, calc(100vw - 1.5rem));
+  padding: 0.95rem 1rem;
+  border-radius: 1.15rem;
+  background: rgba(141, 59, 45, 0.96);
+  color: #fff;
+  box-shadow: 0 20px 48px rgba(66, 30, 22, 0.24);
+}
+.diagnostic-error-toast p {
+  margin: 0;
+  line-height: 1.45;
+}
+.diagnostic-error-toast button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: #fff;
+}
+.diagnostic-error-toast button:hover {
+  background: rgba(255,255,255,0.14);
+}
+.diagnostic-error-toast span {
+  font-size: 1.35rem;
+  line-height: 1;
+}
 @media (max-width: 980px) {
   .diagnostic-grid { grid-template-columns: 1fr; }
   .diagnostic-thread { max-height: 26rem; }
+  .diagnostic-insight { position: static; }
 }
 @media (max-width: 680px) {
   .diagnostic-chat,
@@ -191,4 +315,11 @@
   .diagnostic-message { max-width: 100%; }
   .diagnostic-email,
   .diagnostic-form button { width: 100%; }
+  .diagnostic-error-toast {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+    transform: none;
+  }
 }

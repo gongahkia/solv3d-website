@@ -59,8 +59,12 @@ app.post("/api/solver-jr", async (req, res) => {
           schema: SOLVER_JR_RESPONSE_SCHEMA,
         },
       },
-      max_output_tokens: 1400,
+      max_output_tokens: 3200,
     });
+
+    if (!response.output_text) {
+      throw new Error("Model returned no structured text output.");
+    }
 
     const payload = parseStructuredOutput(response.output_text);
     await maybeLogSignal({

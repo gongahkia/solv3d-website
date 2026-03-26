@@ -37,7 +37,7 @@ export default function Diagnostic() {
   const [messages, setMessages] = createSignal([initialAssistantMessage()]);
   const [input, setInput] = createSignal("");
   const [loading, setLoading] = createSignal(false);
-  const [error, setError] = createSignal("");
+  const [errorToast, setErrorToast] = createSignal("");
   const [insight, setInsight] = createSignal(null);
   let activeRequest = 0;
   let lastLanguage = lang();
@@ -57,7 +57,7 @@ export default function Diagnostic() {
     setMessages([initialAssistantMessage()]);
     setInput("");
     setLoading(false);
-    setError("");
+    setErrorToast("");
     setInsight(null);
   }
 
@@ -71,7 +71,7 @@ export default function Diagnostic() {
     setMessages(history);
     setInput("");
     setLoading(true);
-    setError("");
+    setErrorToast("");
 
     try {
       const response = await fetch("/api/solver-jr", {
@@ -99,8 +99,7 @@ export default function Diagnostic() {
     } catch (requestError) {
       if (requestId !== activeRequest) return;
       const message = requestError.message || t().diagnostic.error;
-      setError(message);
-      setMessages([...history, { role: "assistant", text: message }]);
+      setErrorToast(message);
     } finally {
       if (requestId === activeRequest) {
         setLoading(false);
@@ -173,23 +172,38 @@ export default function Diagnostic() {
                 {loading() ? t().diagnostic.sending : t().diagnostic.send}
               </button>
             </form>
-
-            <Show when={error()}>
-              <p class="diagnostic-error">{error()}</p>
-            </Show>
           </div>
 
           <aside class="diagnostic-insight">
             <div class="diagnostic-insight-top">
               <p>{t().diagnostic.insightTitle}</p>
-              <a href={mailtoHref()} class="diagnostic-email">
-                {t().diagnostic.emailCta}
-              </a>
+              <Show
+                when={insight()}
+                fallback={<span class="diagnostic-email is-disabled">{t().diagnostic.emailCta}</span>}
+              >
+                <a href={mailtoHref()} class="diagnostic-email">
+                  {t().diagnostic.emailCta}
+                </a>
+              </Show>
             </div>
 
             <Show
               when={insight()}
-              fallback={<p class="diagnostic-empty">{t().diagnostic.insightEmpty}</p>}
+              fallback={
+                <div class="diagnostic-empty-state">
+                  <div class="diagnostic-empty-orbit" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <p class="diagnostic-empty">{t().diagnostic.insightEmpty}</p>
+                  <div class="diagnostic-empty-list">
+                    <span>{t().diagnostic.firstMoveLabel}</span>
+                    <span>{t().diagnostic.opportunitiesLabel}</span>
+                    <span>{t().diagnostic.prerequisitesLabel}</span>
+                  </div>
+                </div>
+              }
             >
               <div class="diagnostic-summary">
                 <span class="diagnostic-stage">{insight().diagnosis_title}</span>
@@ -240,6 +254,15 @@ export default function Diagnostic() {
             </Show>
           </aside>
         </div>
+
+        <Show when={errorToast()}>
+          <aside class="diagnostic-error-toast" aria-live="polite">
+            <p>{errorToast()}</p>
+            <button type="button" onClick={() => setErrorToast("")} aria-label={t().diagnostic.dismiss}>
+              <span>&times;</span>
+            </button>
+          </aside>
+        </Show>
       </div>
     </section>
   );
