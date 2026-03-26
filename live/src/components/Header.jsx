@@ -18,6 +18,8 @@ export default function Header() {
         <nav class="site-nav" aria-label="Primary">
           <a href="#team">{t().nav.us}</a>
           <a href="#projects">{t().nav.projects}</a>
+          <a href="#ask">{t().nav.ask}</a>
+          <a href="#faq">{t().nav.faq}</a>
           <a href={`mailto:${CONTACT_EMAIL}`} class="nav-cta">{t().nav.contact}</a>
         </nav>
         <button class="mobile-toggle" onClick={toggle} aria-label="Menu" classList={{ "is-open": open() }}>
@@ -27,6 +29,8 @@ export default function Header() {
       <div class="mobile-menu" classList={{ "is-open": open() }}>
         <a href="#team" onClick={close}>{t().nav.us}</a>
         <a href="#projects" onClick={close}>{t().nav.projects}</a>
+        <a href="#ask" onClick={close}>{t().nav.ask}</a>
+        <a href="#faq" onClick={close}>{t().nav.faq}</a>
         <a href={`mailto:${CONTACT_EMAIL}`} onClick={close}>{t().nav.contact}</a>
       </div>
     </header>

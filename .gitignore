@@ -1,3 +1,7 @@
 node_modules
 .DS_STORE
 CLAUDE.md
+.playwright-cli
+.env
+.env.*
+!.env.example

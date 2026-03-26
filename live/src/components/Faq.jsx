@@ -34,7 +34,6 @@ export default function Faq() {
     <section class="section" id="faq" ref={sectionRef}>
       <div class="shell section-shell">
         <div class="section-heading reveal">
-          <p class="faq-eyebrow">{t().faq.eyebrow}</p>
           <h2>{t().faq.title}</h2>
           <p>{t().faq.intro}</p>
         </div>

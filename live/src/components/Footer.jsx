@@ -43,7 +43,8 @@ export default function Footer() {
             <a href="#top">{t().footer.home}</a>
             <a href="#team">{t().nav.us}</a>
             <a href="#projects">{t().nav.projects}</a>
-            <a href="#faq">FAQ</a>
+            <a href="#ask">{t().nav.ask}</a>
+            <a href="#faq">{t().nav.faq}</a>
           </div>
           <div class="footer-nav-col">
             <h4>{t().footer.contact}</h4>

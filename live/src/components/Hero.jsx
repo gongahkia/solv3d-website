@@ -29,7 +29,6 @@ export default function Hero() {
     <section class="hero section" ref={sectionRef}>
       <div class="shell hero-grid reveal" ref={sectionRef}>
         <div class="hero-copy">
-          <p class="hero-kicker">{t().hero.eyebrow}</p>
           <h1>{t().hero.title}</h1>
           <p class="hero-body">{t().hero.body}</p>
         </div>
