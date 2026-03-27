@@ -1,9 +1,5 @@
-const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+import { getSolverJrStatus } from "../../server/solverJrCore.mjs";
 
 export default function handler(_req, res) {
-  res.json({
-    enabled: Boolean(process.env.OPENAI_API_KEY),
-    model,
-    loggingEnabled: false,
-  });
+  res.json(getSolverJrStatus({ loggingEnabled: false }));
 }

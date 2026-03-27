@@ -1,4 +1,11 @@
-import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import {
+  SOLVER_JR_RATE_LIMIT,
+  consumeSolverJrRateLimitState,
+  createEmptySolverJrRateLimitState,
+  evaluateSolverJrRateLimitState,
+  normalizeSolverJrRateLimitState,
+} from "../../shared/solverJrRateLimit.js";
 import { CONTACT_EMAIL, t } from "../data/content";
 import { lang } from "../data/lang";
 import "./Diagnostic.css";
@@ -60,18 +67,130 @@ function buildMailtoHref(insight) {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+function buildGeneralContactHref() {
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t().diagnostic.limitContactSubject)}`;
+}
+
+function formatWaitTime(totalSeconds) {
+  const safeSeconds = Math.max(0, Number.isFinite(totalSeconds) ? Math.ceil(totalSeconds) : 0);
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  const seconds = safeSeconds % 60;
+
+  if (hours > 0) return `${hours}h ${String(minutes).padStart(2, "0")}m`;
+  if (minutes > 0) return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
+  return `${seconds}s`;
+}
+
+function readClientRateLimitState() {
+  if (typeof localStorage === "undefined") {
+    return createEmptySolverJrRateLimitState();
+  }
+
+  try {
+    const raw = localStorage.getItem(SOLVER_JR_RATE_LIMIT.storageKey);
+    if (!raw) return createEmptySolverJrRateLimitState();
+
+    return normalizeSolverJrRateLimitState(JSON.parse(raw));
+  } catch (_error) {
+    return createEmptySolverJrRateLimitState();
+  }
+}
+
+function persistClientRateLimitState(state) {
+  if (typeof localStorage === "undefined") return;
+
+  try {
+    localStorage.setItem(
+      SOLVER_JR_RATE_LIMIT.storageKey,
+      JSON.stringify(normalizeSolverJrRateLimitState(state))
+    );
+  } catch (_error) {
+    // Ignore storage failures and fall back to backend enforcement.
+  }
+}
+
+function isRateLimitPayload(payload) {
+  return payload?.code === SOLVER_JR_RATE_LIMIT.errorCode
+    && (payload.scope === "cooldown" || payload.scope === "daily_cap");
+}
+
+function buildClientStateFromRateLimitPayload(payload, fallbackState) {
+  const now = Date.now();
+  const currentState = normalizeSolverJrRateLimitState(fallbackState, now);
+
+  if (payload?.scope === "cooldown") {
+    const retryAfterSeconds = Math.max(1, Number(payload.retryAfterSeconds) || SOLVER_JR_RATE_LIMIT.cooldownSeconds);
+    return {
+      timestamps: currentState.timestamps,
+      nextAllowedAt: now + retryAfterSeconds * 1000,
+    };
+  }
+
+  if (payload?.scope === "daily_cap") {
+    const resetsAt = Date.parse(payload.resetsAt || "");
+    const windowStart = Number.isFinite(resetsAt)
+      ? resetsAt - SOLVER_JR_RATE_LIMIT.windowMs
+      : now;
+
+    return normalizeSolverJrRateLimitState({
+      timestamps: Array.from(
+        { length: SOLVER_JR_RATE_LIMIT.maxTurnsPer24h },
+        (_value, index) => windowStart + index
+      ),
+      nextAllowedAt: 0,
+    }, now);
+  }
+
+  return currentState;
+}
+
 export default function Diagnostic() {
   const [messages, setMessages] = createSignal([initialAssistantMessage()]);
   const [input, setInput] = createSignal("");
   const [loading, setLoading] = createSignal(false);
   const [errorToast, setErrorToast] = createSignal("");
   const [insight, setInsight] = createSignal(null);
+  const [clientRateLimitState, setClientRateLimitState] = createSignal(readClientRateLimitState());
+  const [nowTick, setNowTick] = createSignal(Date.now());
   let activeRequest = 0;
   let lastLanguage = lang();
+  let rateLimitTimer;
 
   const mailtoHref = createMemo(() => buildMailtoHref(insight()));
+  const limitContactHref = createMemo(() => (insight() ? mailtoHref() : buildGeneralContactHref()));
   const hasUserMessages = createMemo(() => messages().some((message) => message.role === "user"));
   const summaryBullets = createMemo(() => buildSummaryBullets(insight()?.diagnosis_summary));
+  const clientRateLimit = createMemo(() => {
+    nowTick();
+    return evaluateSolverJrRateLimitState(clientRateLimitState(), Date.now());
+  });
+  const isClientRateLimited = createMemo(() => !clientRateLimit().allowed);
+  const rateLimitNotice = createMemo(() => {
+    const limit = clientRateLimit();
+    if (limit.allowed) return null;
+
+    return {
+      title: limit.scope === "daily_cap"
+        ? t().diagnostic.limitDailyTitle
+        : t().diagnostic.limitCooldownTitle,
+      body: limit.scope === "daily_cap"
+        ? t().diagnostic.limitDailyBody
+        : t().diagnostic.limitCooldownBody,
+      waitLabel: limit.scope === "daily_cap"
+        ? t().diagnostic.limitResetLabel
+        : t().diagnostic.limitRetryLabel,
+      waitValue: formatWaitTime(limit.retryAfterSeconds),
+    };
+  });
+
+  onMount(() => {
+    rateLimitTimer = window.setInterval(() => setNowTick(Date.now()), 1000);
+  });
+
+  onCleanup(() => {
+    window.clearInterval(rateLimitTimer);
+  });
 
   createEffect(() => {
     const currentLanguage = lang();
@@ -79,6 +198,13 @@ export default function Diagnostic() {
     lastLanguage = currentLanguage;
     resetConversation();
   });
+
+  function applyClientRateLimitState(nextState) {
+    const normalized = normalizeSolverJrRateLimitState(nextState);
+    setClientRateLimitState(normalized);
+    persistClientRateLimitState(normalized);
+    setNowTick(Date.now());
+  }
 
   function resetConversation() {
     activeRequest += 1;
@@ -93,13 +219,23 @@ export default function Diagnostic() {
     const text = rawText.trim();
     if (!text || loading()) return;
 
+    const currentRateLimit = evaluateSolverJrRateLimitState(clientRateLimitState(), Date.now());
+    if (!currentRateLimit.allowed) {
+      setErrorToast("");
+      setNowTick(Date.now());
+      return;
+    }
+
     const history = [...messages(), { role: "user", text }].slice(-10);
     const requestId = ++activeRequest;
+    const previousRateLimitState = clientRateLimitState();
+    let shouldRestoreClientRateLimit = true;
 
     setMessages(history);
     setInput("");
     setLoading(true);
     setErrorToast("");
+    applyClientRateLimitState(consumeSolverJrRateLimitState(previousRateLimitState, Date.now()));
 
     try {
       const response = await fetch("/api/solver-jr", {
@@ -111,10 +247,24 @@ export default function Diagnostic() {
         }),
       });
 
-      const payload = await response.json();
+      let payload = {};
+      try {
+        payload = await response.json();
+      } catch (_error) {
+        payload = {};
+      }
+
       if (!response.ok) {
+        if (response.status === 429 && isRateLimitPayload(payload)) {
+          applyClientRateLimitState(buildClientStateFromRateLimitPayload(payload, previousRateLimitState));
+          shouldRestoreClientRateLimit = false;
+          return;
+        }
+
         throw new Error(payload.error || t().diagnostic.error);
       }
+
+      shouldRestoreClientRateLimit = false;
 
       if (requestId !== activeRequest) return;
 
@@ -125,6 +275,10 @@ export default function Diagnostic() {
       setMessages([...history, { role: "assistant", text: assistantText }]);
       setInsight(payload);
     } catch (requestError) {
+      if (shouldRestoreClientRateLimit) {
+        applyClientRateLimitState(previousRateLimitState);
+      }
+
       if (requestId !== activeRequest) return;
       const message = requestError.message || t().diagnostic.error;
       setErrorToast(message);
@@ -172,7 +326,12 @@ export default function Diagnostic() {
                   <div class="diagnostic-chip-row">
                     <For each={t().diagnostic.starters}>
                       {(starter) => (
-                        <button type="button" class="diagnostic-chip" onClick={() => submitMessage(starter)} disabled={loading()}>
+                        <button
+                          type="button"
+                          class="diagnostic-chip"
+                          onClick={() => submitMessage(starter)}
+                          disabled={loading() || isClientRateLimited()}
+                        >
                           {starter}
                         </button>
                       )}
@@ -196,9 +355,25 @@ export default function Diagnostic() {
                 rows="4"
                 disabled={loading()}
               />
-              <button type="submit" disabled={loading() || !input().trim()}>
+              <button type="submit" disabled={loading() || !input().trim() || isClientRateLimited()}>
                 {loading() ? t().diagnostic.sending : t().diagnostic.send}
               </button>
+
+              <Show when={rateLimitNotice()}>
+                {(notice) => (
+                  <aside class="diagnostic-limit" aria-live="polite">
+                    <div class="diagnostic-limit-copy">
+                      <span class="diagnostic-limit-title">{notice().title}</span>
+                      <p>{notice().body}</p>
+                      <span class="diagnostic-limit-meta">{`${notice().waitLabel} ${notice().waitValue}`}</span>
+                      <p class="diagnostic-limit-contact">{t().diagnostic.limitContactBody}</p>
+                    </div>
+                    <a href={limitContactHref()} class="diagnostic-limit-link">
+                      {t().diagnostic.limitContactCta}
+                    </a>
+                  </aside>
+                )}
+              </Show>
             </form>
           </div>
 
