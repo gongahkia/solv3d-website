@@ -13,6 +13,33 @@ function formatReadiness(readiness) {
   return t().diagnostic.readinessNotYet;
 }
 
+function normalizeText(text) {
+  return typeof text === "string" ? text.replace(/\s+/g, " ").trim() : "";
+}
+
+function shortenText(text, maxLength = 150) {
+  const normalized = normalizeText(text);
+  if (normalized.length <= maxLength) return normalized;
+
+  const cropped = normalized.slice(0, maxLength);
+  const breakAt = cropped.lastIndexOf(" ");
+  const safeCrop = breakAt > maxLength * 0.6 ? cropped.slice(0, breakAt) : cropped;
+  return `${safeCrop.trimEnd()}…`;
+}
+
+function buildSummaryBullets(text) {
+  const normalized = normalizeText(text);
+  if (!normalized) return [];
+
+  const bullets = normalized
+    .split(/(?<=[.!?])\s+|(?<=[。！？])\s*/u)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (bullets.length > 1) return bullets.slice(0, 3).map((item) => shortenText(item, 115));
+  return [shortenText(normalized, 180)];
+}
+
 function buildMailtoHref(insight) {
   if (!insight) return `mailto:${CONTACT_EMAIL}`;
 
@@ -44,6 +71,7 @@ export default function Diagnostic() {
 
   const mailtoHref = createMemo(() => buildMailtoHref(insight()));
   const hasUserMessages = createMemo(() => messages().some((message) => message.role === "user"));
+  const summaryBullets = createMemo(() => buildSummaryBullets(insight()?.diagnosis_summary));
 
   createEffect(() => {
     const currentLanguage = lang();
@@ -202,12 +230,16 @@ export default function Diagnostic() {
             >
               <div class="diagnostic-summary">
                 <span class="diagnostic-stage">{insight().diagnosis_title}</span>
-                <p>{insight().diagnosis_summary}</p>
+                <ul class="diagnostic-summary-list">
+                  <For each={summaryBullets()}>
+                    {(item) => <li>{item}</li>}
+                  </For>
+                </ul>
               </div>
 
               <div class="diagnostic-panel">
                 <span>{t().diagnostic.firstMoveLabel}</span>
-                <p>{insight().recommended_first_move}</p>
+                <p>{shortenText(insight().recommended_first_move, 135)}</p>
               </div>
 
               <Show when={insight().ai_opportunities.length}>
@@ -216,11 +248,18 @@ export default function Diagnostic() {
                   <For each={insight().ai_opportunities}>
                     {(item) => (
                       <div class="diagnostic-opp-row">
-                        <span class="diagnostic-opp-title">{item.title}</span>
-                        <span class="diagnostic-opp-badge" classList={{
-                          "is-ready": item.readiness === "ready_now",
-                          "is-foundation": item.readiness === "needs_foundation",
-                        }}>{formatReadiness(item.readiness)}</span>
+                        <div class="diagnostic-opp-copy">
+                          <span class="diagnostic-opp-title">{shortenText(item.title, 78)}</span>
+                        </div>
+                        <span
+                          class="diagnostic-opp-badge"
+                          classList={{
+                            "is-ready": item.readiness === "ready_now",
+                            "is-foundation": item.readiness === "needs_foundation",
+                          }}
+                        >
+                          {formatReadiness(item.readiness)}
+                        </span>
                       </div>
                     )}
                   </For>
