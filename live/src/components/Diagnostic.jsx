@@ -10,6 +10,8 @@ import { CONTACT_EMAIL, t } from "../data/content";
 import { lang } from "../data/lang";
 import "./Diagnostic.css";
 
+const SOLVER_JR_TOAST_EVENT = "solver-jr-toast";
+
 function initialAssistantMessage() {
   return { role: "assistant", text: t().diagnostic.promptLabel };
 }
@@ -80,6 +82,10 @@ function formatWaitTime(totalSeconds) {
   if (hours > 0) return `${hours}h ${String(minutes).padStart(2, "0")}m`;
   if (minutes > 0) return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
   return `${seconds}s`;
+}
+
+function interpolateTemplate(template, values) {
+  return String(template || "").replace(/\{(\w+)\}/g, (_match, key) => values[key] ?? "");
 }
 
 function readClientRateLimitState() {
@@ -165,23 +171,21 @@ export default function Diagnostic() {
     nowTick();
     return evaluateSolverJrRateLimitState(clientRateLimitState(), Date.now());
   });
-  const isClientRateLimited = createMemo(() => !clientRateLimit().allowed);
-  const rateLimitNotice = createMemo(() => {
-    const limit = clientRateLimit();
-    if (limit.allowed) return null;
+  const isCooldownLimited = createMemo(() => !clientRateLimit().allowed && clientRateLimit().scope === "cooldown");
+  const isDailyCapLimited = createMemo(() => !clientRateLimit().allowed && clientRateLimit().scope === "daily_cap");
+  const isSubmitSoftDisabled = createMemo(() => !loading() && isCooldownLimited());
+  const isSubmitHardDisabled = createMemo(() => loading() || (!input().trim() && !isCooldownLimited()));
+  const submitButtonLabel = createMemo(() => {
+    if (loading()) return t().diagnostic.sending;
 
-    return {
-      title: limit.scope === "daily_cap"
-        ? t().diagnostic.limitDailyTitle
-        : t().diagnostic.limitCooldownTitle,
-      body: limit.scope === "daily_cap"
-        ? t().diagnostic.limitDailyBody
-        : t().diagnostic.limitCooldownBody,
-      waitLabel: limit.scope === "daily_cap"
-        ? t().diagnostic.limitResetLabel
-        : t().diagnostic.limitRetryLabel,
-      waitValue: formatWaitTime(limit.retryAfterSeconds),
-    };
+    const limit = clientRateLimit();
+    if (!limit.allowed && limit.scope === "cooldown") {
+      return interpolateTemplate(t().diagnostic.sendCooldown, {
+        time: formatWaitTime(limit.retryAfterSeconds),
+      });
+    }
+
+    return t().diagnostic.send;
   });
 
   onMount(() => {
@@ -215,6 +219,30 @@ export default function Diagnostic() {
     setInsight(null);
   }
 
+  function showRateLimitToast(limit) {
+    if (typeof window === "undefined" || !limit || limit.allowed) return;
+
+    const title = limit.scope === "daily_cap"
+      ? t().diagnostic.limitDailyTitle
+      : t().diagnostic.limitCooldownTitle;
+    const body = [
+      limit.scope === "daily_cap"
+        ? t().diagnostic.limitDailyBody
+        : t().diagnostic.limitCooldownBody,
+      `${limit.scope === "daily_cap" ? t().diagnostic.limitResetLabel : t().diagnostic.limitRetryLabel} ${formatWaitTime(limit.retryAfterSeconds)}.`,
+      t().diagnostic.limitContactBody,
+    ].join(" ");
+
+    window.dispatchEvent(new CustomEvent(SOLVER_JR_TOAST_EVENT, {
+      detail: {
+        kicker: title,
+        body,
+        linkHref: limitContactHref(),
+        linkLabel: t().diagnostic.limitContactCta,
+      },
+    }));
+  }
+
   async function submitMessage(rawText) {
     const text = rawText.trim();
     if (!text || loading()) return;
@@ -223,6 +251,7 @@ export default function Diagnostic() {
     if (!currentRateLimit.allowed) {
       setErrorToast("");
       setNowTick(Date.now());
+      showRateLimitToast(currentRateLimit);
       return;
     }
 
@@ -256,8 +285,10 @@ export default function Diagnostic() {
 
       if (!response.ok) {
         if (response.status === 429 && isRateLimitPayload(payload)) {
-          applyClientRateLimitState(buildClientStateFromRateLimitPayload(payload, previousRateLimitState));
+          const nextRateLimitState = buildClientStateFromRateLimitPayload(payload, previousRateLimitState);
+          applyClientRateLimitState(nextRateLimitState);
           shouldRestoreClientRateLimit = false;
+          showRateLimitToast(evaluateSolverJrRateLimitState(nextRateLimitState, Date.now()));
           return;
         }
 
@@ -330,7 +361,7 @@ export default function Diagnostic() {
                           type="button"
                           class="diagnostic-chip"
                           onClick={() => submitMessage(starter)}
-                          disabled={loading() || isClientRateLimited()}
+                          disabled={loading() || isCooldownLimited()}
                         >
                           {starter}
                         </button>
@@ -355,25 +386,21 @@ export default function Diagnostic() {
                 rows="4"
                 disabled={loading()}
               />
-              <button type="submit" disabled={loading() || !input().trim() || isClientRateLimited()}>
-                {loading() ? t().diagnostic.sending : t().diagnostic.send}
+              <button
+                type="submit"
+                disabled={isSubmitHardDisabled()}
+                aria-disabled={(isSubmitSoftDisabled() || isDailyCapLimited()) ? "true" : undefined}
+                classList={{ "is-soft-disabled": isSubmitSoftDisabled() }}
+                onClick={(event) => {
+                  const limit = clientRateLimit();
+                  if (!loading() && !limit.allowed) {
+                    event.preventDefault();
+                    showRateLimitToast(limit);
+                  }
+                }}
+              >
+                {submitButtonLabel()}
               </button>
-
-              <Show when={rateLimitNotice()}>
-                {(notice) => (
-                  <aside class="diagnostic-limit" aria-live="polite">
-                    <div class="diagnostic-limit-copy">
-                      <span class="diagnostic-limit-title">{notice().title}</span>
-                      <p>{notice().body}</p>
-                      <span class="diagnostic-limit-meta">{`${notice().waitLabel} ${notice().waitValue}`}</span>
-                      <p class="diagnostic-limit-contact">{t().diagnostic.limitContactBody}</p>
-                    </div>
-                    <a href={limitContactHref()} class="diagnostic-limit-link">
-                      {t().diagnostic.limitContactCta}
-                    </a>
-                  </aside>
-                )}
-              </Show>
             </form>
           </div>
 

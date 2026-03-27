@@ -27,6 +27,7 @@ const I18N = {
       inputPlaceholder: "Describe your team, workflow, or bottleneck...",
       send: "Ask Solver Jr.",
       sending: "Thinking...",
+      sendCooldown: "Ask Solver Jr. in {time}",
       error: "Solver Jr. could not respond just now. Try again in a moment.",
       starterTitle: "Good starting points",
       starters: [
@@ -100,6 +101,7 @@ const I18N = {
       inputPlaceholder: "描述一下你的团队、流程或瓶颈……",
       send: "问 Solver Jr.",
       sending: "思考中……",
+      sendCooldown: "{time} 后再问 Solver Jr.",
       error: "Solver Jr. 暂时无法回应。请稍后再试。",
       starterTitle: "可以这样开始",
       starters: [
@@ -173,6 +175,7 @@ const I18N = {
       inputPlaceholder: "Terangkan pasukan, aliran kerja, atau bottleneck anda...",
       send: "Tanya Solver Jr.",
       sending: "Sedang berfikir...",
+      sendCooldown: "Tanya Solver Jr. dalam {time}",
       error: "Solver Jr. tidak dapat membalas sekarang. Cuba lagi sebentar nanti.",
       starterTitle: "Cara mudah untuk mula",
       starters: [
@@ -246,6 +249,7 @@ const I18N = {
       inputPlaceholder: "உங்கள் குழு, workflow, அல்லது bottleneck பற்றி சொல்லுங்கள்...",
       send: "Solver Jr. ஐ கேளுங்கள்",
       sending: "சிந்தித்து வருகிறது...",
+      sendCooldown: "{time} கழித்து Solver Jr. ஐ கேளுங்கள்",
       error: "Solver Jr. இப்போது பதிலளிக்க முடியவில்லை. சில நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.",
       starterTitle: "இப்படி தொடங்கலாம்",
       starters: [

@@ -35,6 +35,17 @@ export function evaluateSolverJrRateLimitState(state, now = Date.now()) {
   const normalized = normalizeSolverJrRateLimitState(state, now);
   const remainingTurns = Math.max(0, SOLVER_JR_RATE_LIMIT.maxTurnsPer24h - normalized.timestamps.length);
 
+  if (normalized.nextAllowedAt > now) {
+    return {
+      allowed: false,
+      scope: "cooldown",
+      retryAfterSeconds: Math.max(1, Math.ceil((normalized.nextAllowedAt - now) / 1000)),
+      remainingTurns,
+      resetsAt: normalized.nextAllowedAt,
+      state: normalized,
+    };
+  }
+
   if (remainingTurns === 0) {
     const resetsAt = normalized.timestamps[0] + SOLVER_JR_RATE_LIMIT.windowMs;
     return {
@@ -43,17 +54,6 @@ export function evaluateSolverJrRateLimitState(state, now = Date.now()) {
       retryAfterSeconds: Math.max(1, Math.ceil((resetsAt - now) / 1000)),
       remainingTurns: 0,
       resetsAt,
-      state: normalized,
-    };
-  }
-
-  if (normalized.nextAllowedAt > now) {
-    return {
-      allowed: false,
-      scope: "cooldown",
-      retryAfterSeconds: Math.max(1, Math.ceil((normalized.nextAllowedAt - now) / 1000)),
-      remainingTurns,
-      resetsAt: normalized.nextAllowedAt,
       state: normalized,
     };
   }
